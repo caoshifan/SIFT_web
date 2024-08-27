@@ -1,0 +1,135 @@
+<!--<!DOCTYPE html>-->
+<!--<html>-->
+<!--<body>-->
+
+<!--<h2>图片上传</h2>-->
+
+<!--<input type="file" id="myFile" name="filename" accept="image/*" multiple>-->
+<!--<br>-->
+<!--<button onclick="uploadImage()">上传图片</button>-->
+<!--<br>-->
+<!--<div id="imagePreview"></div>-->
+<!--<br>-->
+<!--<button onclick="checkDuplicate()">查重</button>-->
+
+<!--<script>-->
+<!--var selectedFiles;-->
+
+<!--function uploadImage() {-->
+<!--    selectedFiles = document.getElementById("myFile").files;-->
+<!--    var imagePreview = document.getElementById("imagePreview");-->
+<!--    imagePreview.innerHTML = '';  // 清空图片预览区域-->
+<!--    for (var i = 0; i < selectedFiles.length; i++) {-->
+<!--        var img = document.createElement("img");-->
+<!--        img.src = URL.createObjectURL(selectedFiles[i]);-->
+<!--        img.height = 100;  // 设置图片高度-->
+<!--        img.onload = function() {-->
+<!--            URL.revokeObjectURL(this.src);-->
+<!--        }-->
+<!--        imagePreview.appendChild(img);-->
+<!--    }-->
+<!--}-->
+
+<!--function checkDuplicate() {-->
+<!--    if (!selectedFiles || selectedFiles.length === 0) {-->
+<!--        alert("请先上传图片");-->
+<!--        return;-->
+<!--    }-->
+<!--    var formData = new FormData();-->
+<!--    for (var i = 0; i < selectedFiles.length; i++) {-->
+<!--        formData.append("images", selectedFiles[i]);-->
+<!--    }-->
+<!--    fetch('/deal_image', {  // 这里的URL需要替换为你的Python后端处理图片的URL-->
+<!--        method: 'POST',-->
+<!--        body: formData-->
+<!--    }).then(response => {-->
+<!--        if (!response.ok) {-->
+<!--            throw new Error(`HTTP error! status: ${response.status}`);-->
+<!--        }-->
+<!--        return response.json();-->
+<!--    }).then(json => {-->
+<!--        console.log(json);-->
+<!--    }).catch(e => {-->
+<!--        console.log('There has been a problem with your fetch operation: ' + e.message);-->
+<!--    });-->
+<!--}-->
+<!--</script>-->
+
+<!--</body>-->
+<!--</html>-->
+
+
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2>图片上传</h2>
+
+<input type="file" id="myFile" name="filename" accept="image/*" multiple>
+<br>
+<button onclick="uploadImage()">上传图片</button>
+<br>
+<div id="imagePreview"></div>
+<br>
+<button onclick="checkDuplicate()">查重</button>
+<br>
+<h2>匹配结果</h2>
+<div id="matchResult"></div>
+
+<script>
+var selectedFiles;
+
+function uploadImage() {
+    selectedFiles = document.getElementById("myFile").files;
+    var imagePreview = document.getElementById("imagePreview");
+    imagePreview.innerHTML = '';  // 清空图片预览区域
+    for (var i = 0; i < selectedFiles.length; i++) {
+        var img = document.createElement("img");
+        img.src = URL.createObjectURL(selectedFiles[i]);
+        img.height = 100;  // 设置图片高度
+        img.onload = function() {
+            URL.revokeObjectURL(this.src);
+        }
+        imagePreview.appendChild(img);
+    }
+}
+
+function checkDuplicate() {
+    if (!selectedFiles || selectedFiles.length === 0) {
+        alert("请先上传图片");
+        return;
+    }
+    var formData = new FormData();
+    for (var i = 0; i < selectedFiles.length; i++) {
+        formData.append("images", selectedFiles[i]);
+    }
+    fetch('/deal_image', {  // 这里的URL需要替换为你的Python后端处理图片的URL
+        method: 'POST',
+        body: formData
+    }).then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    }).then(json => {
+<!--        var matchResult = document.getElementById("matchResult");-->
+<!--        matchResult.innerHTML = '';  // 清空匹配结果区域-->
+<!--        var img = document.createElement("img");-->
+<!--        img.src = "data:image/jpeg;base64," + json.image;-->
+<!--        matchResult.appendChild(img);-->
+            var matchResult = document.getElementById("matchResult");
+            matchResult.innerHTML = '';  // 清空匹配结果区域
+            var img = document.createElement("img");
+            img.src = "data:image/jpeg;base64," + json.image;
+            img.style.width = '800px';  // 设置图片宽度
+            img.style.height = 'auto';  // 设置图片高度
+            matchResult.appendChild(img);
+
+    }).catch(e => {
+        console.log('There has been a problem with your fetch operation: ' + e.message);
+    });
+}
+</script>
+
+</body>
+</html>
